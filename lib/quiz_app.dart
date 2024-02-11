@@ -123,6 +123,7 @@ class _QuizAppState extends State<QuizApp> {
                   selectedIndex = 0;
                   if (allQuestions[questionIndex]['answerIndex'] == 0) {
                     flag1 = true;
+                    score++;
                   }
                 });
               },
@@ -159,6 +160,7 @@ class _QuizAppState extends State<QuizApp> {
                   selectedIndex = 1;
                   if (allQuestions[questionIndex]['answerIndex'] == 1) {
                     flag2 = true;
+                    score++;
                   }
                 });
               },
@@ -196,6 +198,7 @@ class _QuizAppState extends State<QuizApp> {
                   selectedIndex = 2;
                   if (allQuestions[questionIndex]['answerIndex'] == 2) {
                     flag3 = true;
+                    score++;
                   }
                 });
               },
@@ -233,6 +236,7 @@ class _QuizAppState extends State<QuizApp> {
                   selectedIndex = 3;
                   if (allQuestions[questionIndex]['answerIndex'] == 3) {
                     flag4 = true;
+                    score++;
                   }
                 });
               },
@@ -321,6 +325,7 @@ class _QuizAppState extends State<QuizApp> {
                     setState(() {
                       questionIndex = 0;
                       questionScreen = true;
+                      score = 0;
                     });
                   },
                   child: const Text('Reset'))
