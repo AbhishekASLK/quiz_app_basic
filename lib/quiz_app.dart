@@ -7,85 +7,103 @@ class QuizApp extends StatefulWidget {
   State<QuizApp> createState() => _QuizAppState();
 }
 
-class _QuizAppState extends State<QuizApp> {
-  bool questionScreen = true;
-  int questionIndex = 0;
-  int selectedIndex = -1;
-  bool flag1 = false;
-  bool flag2 = false;
-  bool flag3 = false;
-  bool flag4 = false;
-  int score = 0;
+class SingleQuestionModel {
+  final String? question;
+  final List<String>? options;
+  final int? answerIndex;
+  const SingleQuestionModel({this.question, this.options, this.answerIndex});
+}
 
-  void reset() {
-    flag1 = false;
-    flag2 = false;
-    flag3 = false;
-    flag4 = false;
+class _QuizAppState extends State<QuizApp> {
+  void validatePage() {
     selectedIndex = -1;
   }
 
-  List<Map> allQuestions = [
-    {
-      "question": "What is Unix?",
-      "options": [
+  MaterialStateProperty<Color?>? checkAnswer(int option) {
+    int answer = allQuestions[questionIndex].answerIndex;
+    if (option == answer) {
+      score++;
+    }
+    if (option == answer && selectedIndex == option ||
+        (selectedIndex != -1 && option == answer)) {
+      return const MaterialStatePropertyAll(Colors.green);
+    }
+    if (option == selectedIndex) {
+      return const MaterialStatePropertyAll(Colors.red);
+    }
+    return null;
+  }
+
+  int selectedIndex = -1;
+  int score = 0;
+  int questionIndex = 0;
+  List allQuestions = [
+    const SingleQuestionModel(
+      question: "What is Unix?",
+      options: [
         "Programming Language",
         "Operating System",
         "Text Editor",
         "Kernel"
       ],
-      "answerIndex": 1,
-    },
-    {
-      "question": "In which language UNIX is written?",
-      "options": [
+      answerIndex: 1,
+    ),
+    const SingleQuestionModel(
+      question: "In which language UNIX is written?",
+      options: [
         "C",
         "C++",
         "Java",
         "Python",
       ],
-      "answerIndex": 0,
-    },
-    {
-      "question": "Which of the following is the first UNIX editor?",
-      "options": [
+      answerIndex: 0,
+    ),
+    const SingleQuestionModel(
+      question: "Which of the following is the first UNIX editor?",
+      options: [
         "vi",
         "emacs",
         "ex",
         "ed",
       ],
-      "answerIndex": 3,
-    },
-    {
-      "question": "Which of the following is not a feature of Unix?",
-      "options": [
+      answerIndex: 3,
+    ),
+    const SingleQuestionModel(
+      question: "Which of the following is not a feature of Unix?",
+      options: [
         "multiuser",
         "easy to use",
         "multitasking",
         "portability",
       ],
-      "answerIndex": 1,
-    },
-    {
-      "question": "Which editor is used by the Unix system to edit files?",
-      "options": [
+      answerIndex: 1,
+    ),
+    const SingleQuestionModel(
+      question: "Which editor is used by the Unix system to edit files?",
+      options: [
         "word",
         "notepad++ ",
         "vi",
         "notepad",
       ],
-      "answerIndex": 2,
-    },
+      answerIndex: 2,
+    ),
   ];
-
-  Scaffold isQuestionScreen() {
-    if (questionScreen) {
+  bool isQuestionScreen = true;
+  @override
+  Widget build(BuildContext context) {
+    if (isQuestionScreen) {
       return Scaffold(
         backgroundColor: Colors.pink,
         appBar: AppBar(
           backgroundColor: Colors.orange,
-          title: const Text('Quiz App'),
-          centerTitle: true,
+          title: const Text(
+            'Quiz App',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 25,
+            ),
+          ),
         ),
         body: Column(
           children: [
@@ -95,10 +113,18 @@ class _QuizAppState extends State<QuizApp> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                const Text(
+                  "Questions: ",
+                  style: TextStyle(
+                    fontSize: 25,
+                    color: Colors.white,
+                  ),
+                ),
                 Text(
-                  'Questions: ${questionIndex + 1}/${allQuestions.length}',
+                  "${questionIndex + 1}/${allQuestions.length}",
                   style: const TextStyle(
                     fontSize: 25,
+                    color: Colors.white,
                   ),
                 ),
               ],
@@ -106,160 +132,105 @@ class _QuizAppState extends State<QuizApp> {
             const SizedBox(
               height: 20,
             ),
-            Text(
-              allQuestions[questionIndex]["question"],
-              style: const TextStyle(
-                fontSize: 20,
+            SizedBox(
+              width: 350,
+              child: Text(
+                allQuestions[questionIndex].question,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 25,
+                ),
               ),
             ),
             const SizedBox(
               height: 20,
             ),
-
-            // ================= Option 1 ===========================
+            // =================== Option 1 =======================
             ElevatedButton(
               onPressed: () {
                 setState(() {
                   selectedIndex = 0;
-                  if (allQuestions[questionIndex]['answerIndex'] == 0) {
-                    flag1 = true;
-                    score++;
-                  }
                 });
               },
               style: ButtonStyle(
-                  fixedSize: const MaterialStatePropertyAll(
-                    Size(300, 50),
-                  ),
-                  backgroundColor: (flag1 ||
-                          (selectedIndex != -1 &&
-                              allQuestions[questionIndex]['answerIndex'] == 0))
-                      ? const MaterialStatePropertyAll(Colors.green)
-                      : (selectedIndex == 0)
-                          ? const MaterialStatePropertyAll(
-                              Colors.red,
-                            )
-                          : const MaterialStatePropertyAll(
-                              Colors.blue,
-                            )),
+                fixedSize: const MaterialStatePropertyAll(
+                  Size(300, 50),
+                ),
+                backgroundColor: checkAnswer(0),
+              ),
               child: Text(
-                allQuestions[questionIndex]['options'][0],
+                allQuestions[questionIndex].options[0],
                 style: const TextStyle(
-                  color: Colors.black,
+                  fontSize: 18,
                 ),
               ),
             ),
             const SizedBox(
-              height: 25,
+              height: 20,
             ),
-
-            // ================= Option 2 ===========================
+            // =================== Option 2 =======================
             ElevatedButton(
               onPressed: () {
                 setState(() {
                   selectedIndex = 1;
-                  if (allQuestions[questionIndex]['answerIndex'] == 1) {
-                    flag2 = true;
-                    score++;
-                  }
                 });
               },
               style: ButtonStyle(
                 fixedSize: const MaterialStatePropertyAll(
                   Size(300, 50),
                 ),
-                backgroundColor: (flag2 ||
-                        (selectedIndex != -1 &&
-                            allQuestions[questionIndex]['answerIndex'] == 1))
-                    ? const MaterialStatePropertyAll(Colors.green)
-                    : (selectedIndex == 1)
-                        ? const MaterialStatePropertyAll(
-                            Colors.red,
-                          )
-                        : const MaterialStatePropertyAll(
-                            Colors.blue,
-                          ),
+                backgroundColor: checkAnswer(1),
               ),
               child: Text(
-                allQuestions[questionIndex]['options'][1],
+                allQuestions[questionIndex].options[1],
                 style: const TextStyle(
-                  color: Colors.black,
+                  fontSize: 18,
                 ),
               ),
             ),
             const SizedBox(
-              height: 25,
+              height: 20,
             ),
-
-            // ================= Option 3 ===========================
+            // =================== Option 3 =======================
             ElevatedButton(
               onPressed: () {
                 setState(() {
                   selectedIndex = 2;
-                  if (allQuestions[questionIndex]['answerIndex'] == 2) {
-                    flag3 = true;
-                    score++;
-                  }
                 });
               },
               style: ButtonStyle(
                 fixedSize: const MaterialStatePropertyAll(
                   Size(300, 50),
                 ),
-                backgroundColor: (flag3 ||
-                        (selectedIndex != -1 &&
-                            allQuestions[questionIndex]['answerIndex'] == 2))
-                    ? const MaterialStatePropertyAll(Colors.green)
-                    : (selectedIndex == 2)
-                        ? const MaterialStatePropertyAll(
-                            Colors.red,
-                          )
-                        : const MaterialStatePropertyAll(
-                            Colors.blue,
-                          ),
+                backgroundColor: checkAnswer(2),
               ),
               child: Text(
-                allQuestions[questionIndex]['options'][2],
+                allQuestions[questionIndex].options[2],
                 style: const TextStyle(
-                  color: Colors.black,
+                  fontSize: 18,
                 ),
               ),
             ),
             const SizedBox(
-              height: 25,
+              height: 20,
             ),
-
-            // ================= Option 4 ===========================
+            // =================== Option 4 =======================
             ElevatedButton(
               onPressed: () {
                 setState(() {
                   selectedIndex = 3;
-                  if (allQuestions[questionIndex]['answerIndex'] == 3) {
-                    flag4 = true;
-                    score++;
-                  }
                 });
               },
               style: ButtonStyle(
                 fixedSize: const MaterialStatePropertyAll(
                   Size(300, 50),
                 ),
-                backgroundColor: (flag4 ||
-                        (selectedIndex != -1 &&
-                            allQuestions[questionIndex]['answerIndex'] == 3))
-                    ? const MaterialStatePropertyAll(Colors.green)
-                    : (selectedIndex == 3)
-                        ? const MaterialStatePropertyAll(
-                            Colors.red,
-                          )
-                        : const MaterialStatePropertyAll(
-                            Colors.blue,
-                          ),
+                backgroundColor: checkAnswer(3),
               ),
               child: Text(
-                allQuestions[questionIndex]['options'][3],
+                allQuestions[questionIndex].options[3],
                 style: const TextStyle(
-                  color: Colors.black,
+                  fontSize: 18,
                 ),
               ),
             ),
@@ -268,76 +239,56 @@ class _QuizAppState extends State<QuizApp> {
         floatingActionButton: FloatingActionButton(
           onPressed: () {
             setState(() {
-              if (questionIndex < allQuestions.length && selectedIndex != -1) {
+              if (questionIndex < allQuestions.length - 1 &&
+                  selectedIndex != -1) {
                 questionIndex++;
-                reset();
               }
-              if (questionIndex == allQuestions.length) {
-                questionScreen = false;
+              if (questionIndex == allQuestions.length - 1) {
+                isQuestionScreen = false;
               }
+              validatePage();
             });
           },
-          backgroundColor: Colors.amber,
           child: const Icon(
             Icons.navigate_next,
-            color: Colors.black,
           ),
         ),
       );
     } else {
       return Scaffold(
-        backgroundColor: Colors.pink,
         appBar: AppBar(
-          title: const Text(
-            'Result',
-            style: TextStyle(
-              color: Colors.white,
-            ),
-          ),
+          title: const Text('Result'),
           backgroundColor: Colors.orange,
         ),
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                '$score/${allQuestions.length}',
-                style: const TextStyle(
-                  fontSize: 30,
-                  color: Colors.white,
-                ),
+        body: Column(
+          children: [
+            Image.network(
+                'https://www.pngitem.com/pimgs/m/267-2675669_trophy-congratulations-for-winning-contest-hd-png-download.png'),
+            const SizedBox(
+              height: 25,
+            ),
+            Text(
+              'Score: $score',
+              style: const TextStyle(
+                fontSize: 25,
               ),
-              const SizedBox(
-                height: 10,
-              ),
-              const Text(
-                'Score',
-                style: TextStyle(
-                  fontSize: 20,
-                  color: Colors.white,
-                ),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              ElevatedButton(
-                  onPressed: () {
-                    setState(() {
-                      questionIndex = 0;
-                      questionScreen = true;
-                      score = 0;
-                    });
-                  },
-                  child: const Text('Reset'))
-            ],
-          ),
+            ),
+            const SizedBox(
+              height: 25,
+            ),
+            ElevatedButton(
+              onPressed: () {
+                setState(() {
+                  questionIndex = 0;
+                  isQuestionScreen = true;
+                  score = 0;
+                });
+              },
+              child: const Text('Reset'),
+            ),
+          ],
         ),
       );
     }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return isQuestionScreen();
   }
 }
