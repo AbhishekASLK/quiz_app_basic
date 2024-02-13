@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class QuizApp extends StatefulWidget {
   const QuizApp({super.key});
@@ -21,7 +22,7 @@ class _QuizAppState extends State<QuizApp> {
 
   MaterialStateProperty<Color?>? checkAnswer(int option) {
     int answer = allQuestions[questionIndex].answerIndex;
-    if (option == answer) {
+    if (option == answer && selectedIndex == option) {
       score++;
     }
     if (option == answer && selectedIndex == option ||
@@ -31,7 +32,7 @@ class _QuizAppState extends State<QuizApp> {
     if (option == selectedIndex) {
       return const MaterialStatePropertyAll(Colors.red);
     }
-    return null;
+    return const MaterialStatePropertyAll(Colors.orange);
   }
 
   int selectedIndex = -1;
@@ -89,19 +90,67 @@ class _QuizAppState extends State<QuizApp> {
       answerIndex: 2,
     ),
   ];
-  bool isQuestionScreen = true;
+  int screens = 0;
   @override
   Widget build(BuildContext context) {
-    if (isQuestionScreen) {
+    if (screens == 0) {
       return Scaffold(
-        backgroundColor: Colors.pink,
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset('assets/images/start.png'),
+            const SizedBox(
+              height: 30,
+            ),
+            ElevatedButton(
+              onPressed: () {
+                setState(() {
+                  screens = 1;
+                });
+              },
+              style: const ButtonStyle(
+                fixedSize: MaterialStatePropertyAll(
+                  Size(150, 50),
+                ),
+                backgroundColor: MaterialStatePropertyAll(
+                  Colors.orange,
+                ),
+              ),
+              child: Text(
+                'Start Quiz',
+                style: GoogleFonts.poppins(
+                  fontSize: 20,
+                  color: Colors.black,
+                ),
+              ),
+            ),
+          ],
+        ),
+        bottomNavigationBar: BottomAppBar(
+          child: SizedBox(
+            height: 50,
+            child: Center(
+              child: Text(
+                'Developed with ❤️ (AbhishekASLK)',
+                style: GoogleFonts.poppins(
+                  fontSize: 16,
+                  color: Colors.black,
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+    }
+    if (screens == 1) {
+      return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.orange,
-          title: const Text(
+          title: Text(
             'Quiz App',
-            style: TextStyle(
-              color: Colors.white,
+            style: GoogleFonts.poppins(
               fontSize: 25,
+              color: Colors.black,
             ),
           ),
         ),
@@ -117,14 +166,12 @@ class _QuizAppState extends State<QuizApp> {
                   "Questions: ",
                   style: TextStyle(
                     fontSize: 25,
-                    color: Colors.white,
                   ),
                 ),
                 Text(
                   "${questionIndex + 1}/${allQuestions.length}",
-                  style: const TextStyle(
-                    fontSize: 25,
-                    color: Colors.white,
+                  style: GoogleFonts.poppins(
+                    fontSize: 20,
                   ),
                 ),
               ],
@@ -132,13 +179,25 @@ class _QuizAppState extends State<QuizApp> {
             const SizedBox(
               height: 20,
             ),
-            SizedBox(
-              width: 350,
-              child: Text(
-                allQuestions[questionIndex].question,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 25,
+            Container(
+              decoration: BoxDecoration(
+                color: Colors.green.withOpacity(0.5),
+                borderRadius: const BorderRadius.all(
+                  Radius.circular(5),
+                ),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(9.0),
+                child: SizedBox(
+                  width: 350,
+                  height: 70,
+                  child: Text(
+                    allQuestions[questionIndex].question,
+                    textAlign: TextAlign.justify,
+                    style: GoogleFonts.poppins(
+                      fontSize: 20,
+                    ),
+                  ),
                 ),
               ),
             ),
@@ -155,6 +214,9 @@ class _QuizAppState extends State<QuizApp> {
               style: ButtonStyle(
                 fixedSize: const MaterialStatePropertyAll(
                   Size(300, 50),
+                ),
+                foregroundColor: const MaterialStatePropertyAll(
+                  Colors.black,
                 ),
                 backgroundColor: checkAnswer(0),
               ),
@@ -179,6 +241,9 @@ class _QuizAppState extends State<QuizApp> {
                 fixedSize: const MaterialStatePropertyAll(
                   Size(300, 50),
                 ),
+                foregroundColor: const MaterialStatePropertyAll(
+                  Colors.black,
+                ),
                 backgroundColor: checkAnswer(1),
               ),
               child: Text(
@@ -201,6 +266,9 @@ class _QuizAppState extends State<QuizApp> {
               style: ButtonStyle(
                 fixedSize: const MaterialStatePropertyAll(
                   Size(300, 50),
+                ),
+                foregroundColor: const MaterialStatePropertyAll(
+                  Colors.black,
                 ),
                 backgroundColor: checkAnswer(2),
               ),
@@ -225,6 +293,9 @@ class _QuizAppState extends State<QuizApp> {
                 fixedSize: const MaterialStatePropertyAll(
                   Size(300, 50),
                 ),
+                foregroundColor: const MaterialStatePropertyAll(
+                  Colors.black,
+                ),
                 backgroundColor: checkAnswer(3),
               ),
               child: Text(
@@ -234,59 +305,154 @@ class _QuizAppState extends State<QuizApp> {
                 ),
               ),
             ),
+            const SizedBox(
+              height: 50,
+            ),
+            Image.asset(
+              'assets/images/bottom.png',
+            ),
           ],
         ),
-        floatingActionButton: FloatingActionButton(
+        floatingActionButton: FloatingActionButton.extended(
+          label: Row(
+            children: [
+              Text(
+                'Next',
+                style: GoogleFonts.poppins(
+                  fontSize: 20,
+                  color: Colors.black,
+                ),
+              ),
+              const SizedBox(width: 5),
+              const Icon(
+                Icons.navigate_next_sharp,
+                size: 30,
+              ),
+            ],
+          ),
+          backgroundColor: Colors.orange,
+          tooltip: 'Choose the option',
           onPressed: () {
             setState(() {
-              if (questionIndex < allQuestions.length - 1 &&
-                  selectedIndex != -1) {
+              if (questionIndex < allQuestions.length && selectedIndex != -1) {
                 questionIndex++;
               }
-              if (questionIndex == allQuestions.length - 1) {
-                isQuestionScreen = false;
+              if (questionIndex == allQuestions.length) {
+                screens = 2;
               }
               validatePage();
             });
           },
-          child: const Icon(
-            Icons.navigate_next,
-          ),
         ),
       );
     } else {
       return Scaffold(
         appBar: AppBar(
-          title: const Text('Result'),
+          title: Text(
+            'Result',
+            style: GoogleFonts.poppins(
+              fontSize: 25,
+            ),
+          ),
           backgroundColor: Colors.orange,
         ),
-        body: Column(
-          children: [
-            Image.network(
-                'https://www.pngitem.com/pimgs/m/267-2675669_trophy-congratulations-for-winning-contest-hd-png-download.png'),
-            const SizedBox(
-              height: 25,
-            ),
-            Text(
-              'Score: $score',
-              style: const TextStyle(
-                fontSize: 25,
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset(
+                'assets/images/result.png',
+                width: 300,
+                height: 300,
               ),
-            ),
-            const SizedBox(
-              height: 25,
-            ),
-            ElevatedButton(
-              onPressed: () {
-                setState(() {
-                  questionIndex = 0;
-                  isQuestionScreen = true;
-                  score = 0;
-                });
-              },
-              child: const Text('Reset'),
-            ),
-          ],
+              const SizedBox(
+                height: 25,
+              ),
+              Column(
+                children: [
+                  Text(
+                    'Congratulation!!!',
+                    style: GoogleFonts.poppins(
+                      fontSize: 20,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Container(
+                    width: 300,
+                    decoration: const BoxDecoration(
+                      color: Colors.green,
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(
+                          5,
+                        ),
+                      ),
+                    ),
+                    child: Container(
+                      padding: const EdgeInsets.all(20),
+                      child: Text(
+                        "You have successfully completed the Quiz...",
+                        textAlign: TextAlign.justify,
+                        style: GoogleFonts.poppins(
+                          fontSize: 20,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Text(
+                    'Score: $score',
+                    style: const TextStyle(
+                      fontSize: 25,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(
+                height: 25,
+              ),
+              ElevatedButton(
+                style: const ButtonStyle(
+                  fixedSize: MaterialStatePropertyAll(
+                    Size(150, 50),
+                  ),
+                  backgroundColor: MaterialStatePropertyAll(
+                    Colors.orange,
+                  ),
+                ),
+                onPressed: () {
+                  setState(() {
+                    questionIndex = 0;
+                    screens = 0;
+                    score = 0;
+                  });
+                },
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      'Restart',
+                      style: GoogleFonts.poppins(
+                        color: Colors.black,
+                        fontSize: 20,
+                      ),
+                    ),
+                    SizedBox(
+                      width: 5,
+                    ),
+                    Icon(
+                      Icons.refresh,
+                      size: 24.0,
+                      color: Colors.black,
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       );
     }
