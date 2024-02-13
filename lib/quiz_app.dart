@@ -182,13 +182,16 @@ class _QuizAppState extends State<QuizApp> {
             Container(
               decoration: BoxDecoration(
                 color: Colors.green.withOpacity(0.5),
+                border: Border.all(
+                  color: Colors.black,
+                ),
                 borderRadius: const BorderRadius.all(
-                  Radius.circular(5),
+                  Radius.circular(10),
                 ),
               ),
               child: Padding(
                 padding: const EdgeInsets.all(9.0),
-                child: SizedBox(
+                child: Container(
                   width: 350,
                   height: 70,
                   child: Text(
