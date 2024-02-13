@@ -40,14 +40,14 @@ class _QuizAppState extends State<QuizApp> {
   int questionIndex = 0;
   List allQuestions = [
     const SingleQuestionModel(
-      question: "What is Unix?",
+      question: "What wrote the kernel of Linux?",
       options: [
-        "Programming Language",
-        "Operating System",
-        "Text Editor",
-        "Kernel"
+        "Linus Torvalds",
+        "Steve Jobs",
+        "AbhishekASLK",
+        "Elon Musk",
       ],
-      answerIndex: 1,
+      answerIndex: 0,
     ),
     const SingleQuestionModel(
       question: "In which language UNIX is written?",
@@ -179,27 +179,16 @@ class _QuizAppState extends State<QuizApp> {
             const SizedBox(
               height: 20,
             ),
-            Container(
-              decoration: BoxDecoration(
-                color: Colors.green.withOpacity(0.5),
-                border: Border.all(
-                  color: Colors.black,
-                ),
-                borderRadius: const BorderRadius.all(
-                  Radius.circular(10),
-                ),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(9.0),
-                child: Container(
-                  width: 350,
-                  height: 70,
-                  child: Text(
-                    allQuestions[questionIndex].question,
-                    textAlign: TextAlign.justify,
-                    style: GoogleFonts.poppins(
-                      fontSize: 20,
-                    ),
+            Padding(
+              padding: const EdgeInsets.all(9.0),
+              child: SizedBox(
+                width: 350,
+                height: 70,
+                child: Text(
+                  allQuestions[questionIndex].question,
+                  textAlign: TextAlign.justify,
+                  style: GoogleFonts.poppins(
+                    fontSize: 20,
                   ),
                 ),
               ),
@@ -350,15 +339,6 @@ class _QuizAppState extends State<QuizApp> {
       );
     } else {
       return Scaffold(
-        appBar: AppBar(
-          title: Text(
-            'Result',
-            style: GoogleFonts.poppins(
-              fontSize: 25,
-            ),
-          ),
-          backgroundColor: Colors.orange,
-        ),
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -385,7 +365,7 @@ class _QuizAppState extends State<QuizApp> {
                   Container(
                     width: 300,
                     decoration: const BoxDecoration(
-                      color: Colors.green,
+                      // color: Colors.green,
                       borderRadius: BorderRadius.all(
                         Radius.circular(
                           5,
@@ -396,7 +376,7 @@ class _QuizAppState extends State<QuizApp> {
                       padding: const EdgeInsets.all(20),
                       child: Text(
                         "You have successfully completed the Quiz...",
-                        textAlign: TextAlign.justify,
+                        textAlign: TextAlign.center,
                         style: GoogleFonts.poppins(
                           fontSize: 20,
                         ),
