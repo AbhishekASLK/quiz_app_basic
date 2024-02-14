@@ -423,10 +423,10 @@ class _QuizAppState extends State<QuizApp> {
                         fontSize: 20,
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 5,
                     ),
-                    Icon(
+                    const Icon(
                       Icons.refresh,
                       size: 24.0,
                       color: Colors.black,
