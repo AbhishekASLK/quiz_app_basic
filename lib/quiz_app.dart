@@ -40,7 +40,7 @@ class _QuizAppState extends State<QuizApp> {
   int questionIndex = 0;
   List allQuestions = [
     const SingleQuestionModel(
-      question: "What wrote the kernel of Linux?",
+      question: "Who wrote the kernel of Linux?",
       options: [
         "Linus Torvalds",
         "Steve Jobs",
